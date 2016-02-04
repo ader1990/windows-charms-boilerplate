@@ -1,6 +1,6 @@
 #ps1_sysnative
 
-# Copyright 2014 Cloudbase Solutions Srl
+# Copyright 2016 Cloudbase Solutions Srl
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -15,19 +15,12 @@
 #    under the License.
 
 $ErrorActionPreference = 'Stop'
+Import-Module "Boilerplate"
+Import-Module "JujuLogging"
 
 try {
-    $modulePath = "$PSScriptRoot\main.psm1"
-    Import-Module -Force -DisableNameChecking $modulePath
+    Start-Reactive
 } catch {
-    juju-log.exe "Error while loading modules: $_.Exception.Message"
-    exit 1
-}
-
-
-try {
-    Run-UpgradeHook
-} catch {
-    juju-log.exe "Error while running main script: $_.Exception.Message"
+    Write-HookTracebackToLog $_
     exit 1
 }
